@@ -7,6 +7,19 @@
     <title>Universal Clipboard</title>
 
     <style>
+        html,
+        body {
+            background-color: #09090b !important;
+        }
+
+        body {
+            visibility: hidden;
+        }
+
+        body.loaded {
+            visibility: visible;
+        }
+
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -108,7 +121,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
+            <br>
+            <p>By signing you agree with our terms and privacy</p>
         </div>
+
     </main>
     <!-- Container 2 hidden by default -->
     <div id="app-view"
@@ -137,6 +153,12 @@
     </div>
 
     <script type="module">
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                document.body.classList.add("loaded");
+            }, 1500)
+        });
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -163,10 +185,7 @@
         const logoutBtn = document.getElementById('logout-btn');
 
         loginButton.addEventListener('click', () => {
-            signInWithPopup(auth, provider).then((result) => {
-                const user = result.user;
-                alert("Welcome to UniversalClipboard: " + user.email + " full user object: " + user);
-            }).catch((error) => {
+            signInWithPopup(auth, provider).catch((error) => {
                 console.error("Login Failed:", error.message);
             });
         })
@@ -185,8 +204,12 @@
                 //cloud to screen
                 noteDocRef = doc(db, "clipboards", user.uid);
                 onSnapshot(noteDocRef, (snapshot) => {
-                    if (snapshot.exists() && document.activeElement !== pasteBox) {
-                        pasteBox.value = snapshot.data().text || "";
+                    if (snapshot.exists()) {
+                        const remoteText = snapshot.data().text || "";
+
+                        if (remoteText !== pasteBox.value) {
+                            pasteBox.value = remoteText;
+                        }
                     }
                 });
 
