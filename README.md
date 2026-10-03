@@ -1,1 +1,19 @@
-# UniversalClipboard
+```text
+┌────────────────────────────────────────────────────────┐
+│                       FRONTEND                         │
+│   Tailwind CSS (UI)  +  Vanilla JavaScript (Logic)     │
+└───────────────────────────┬────────────────────────────┘
+                            │
+               Event Triggers / Secure SDKs
+                            │
+┌───────────────────────────▼────────────────────────────┐
+│                  BACKEND (Firebase)                    │
+│   ┌──────────────────────┐    ┌─────────────────────┐  │
+│   │   Firebase Auth      │    │  Cloud Firestore    │  │
+│   │  (Google Sign-In)    │    │ (Real-time NoSQL)   │  │
+│   └──────────────────────┘    └──────────┬──────────┘  │
+│                                          │             │
+│                                   IndexedDB Cache      │
+│                                    (Offline Web)       │
+└────────────────────────────────────────────────────────┘
+```
